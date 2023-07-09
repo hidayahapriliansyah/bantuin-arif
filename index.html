@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menghitung caritana mah</title>
+  </head>
+  <body>
+    <h1>Konversi Dolar ke Rupiah (Contoh)</h1>
+    <form>
+      <div>
+        <label for="dollar">Masukkan Dolar</label>
+        <input id="dollar" type="number">
+      </div>
+      <div>
+        <button type="submit">Hitung</button>
+      </div>
+    </form>
+
+    <div>
+      <h2>Hasil</h2>
+      <span id="result"></span>
+    </div>
+
+    <script>
+      const form = document.querySelector('form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const dollarInput = document.querySelector('#dollar').value;
+        const payload = {
+          data: dollarInput,
+        };
+
+        // ngirim http request sembari ngasih data hitungana
+        try {
+          const response = await fetch('http://localhost:3000/convert', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+          });
+          // ngambil data matang na
+          const result = await response.json();
+
+          // nyuntikeun hasil kana element html
+          const resultElement = document.querySelector('#result');
+          resultElement.innerHTML = result.data.result;
+
+        } catch (error) {
+          alert('Terjadi error : ' + error);
+          console.log(error);
+        }
+      });
+    </script>
+  </body>
+</html>
